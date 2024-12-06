@@ -1,0 +1,39 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm install -g pnpm
+            - pnpm install
+        build:
+          commands:
+            - pnpm turbo run build --filter=docs
+      artifacts:
+        baseDirectory: apps/docs/.next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .next/cache/**/*
+          - node_modules/**/*
+      buildPath: /
+    appRoot: apps/docs
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npx pnpm install
+        build:
+          commands:
+            - npx turbo run build --filter=web
+      artifacts:
+        baseDirectory: apps/web/.next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .next/cache/**/*
+          - node_modules/**/*
+      buildPath: /
+    appRoot: apps/web
